@@ -16,6 +16,9 @@ async function bootstrap() {
   app.setGlobalPrefix(`api/${version}`);
   app.enableCors();
 
+  const documentFactory = () => SwaggerModule.createDocument(app, swaggerConfig());
+  SwaggerModule.setup('api/api-docs', app, documentFactory);
+
   logger.log(`Server running on port ${port}`);
   await app.listen(port);
 }

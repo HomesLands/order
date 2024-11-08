@@ -34,6 +34,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^8.0.1",
     "@nestjs/typeorm": "^10.0.2",
+    "@types/shortid": "^2.2.0",
     "axios": "^1.7.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -45,6 +46,7 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "shortid": "^2.2.16",
     "stack-trace": "^1.0.0-pre1",
     "typeorm": "^0.3.20",
     "winston-daily-rotate-file": "^5.0.0"
