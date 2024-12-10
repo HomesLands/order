@@ -10,6 +10,7 @@ import {
   Post,
   Query,
   UploadedFile,
+  UploadedFiles,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
@@ -32,7 +33,7 @@ import {
 } from './product.dto';
 import { ApiResponseWithType } from 'src/app/app.decorator';
 import { AppResponseDto } from 'src/app/app.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { RoleEnum } from 'src/role/role.enum';
 import { HasRoles } from 'src/role/roles.decorator';
 
@@ -217,9 +218,12 @@ export class ProductController {
     schema: {
       type: 'object',
       properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
+        files: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
         },
       },
     },
@@ -235,12 +239,12 @@ export class ProductController {
     description: 'Product image have been uploaded successfully',
   })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FilesInterceptor('files'))
   async uploadMultiProductImages(
     @Param('slug') slug: string,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFiles() files: Express.Multer.File[],
   ) {
-    const result = await this.productService.uploadMultiProductImages(slug, file);
+    const result = await this.productService.uploadMultiProductImages(slug, files);
     return {
       message: 'Product have been updated successfully',
       statusCode: HttpStatus.OK,

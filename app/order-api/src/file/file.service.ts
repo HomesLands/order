@@ -33,6 +33,15 @@ export class FileService {
     return createdFile;
   }
 
+  async uploadFiles(files: Express.Multer.File[]) {
+    const context = `${FileService.name}.${this.uploadFiles.name}`;
+    const uploadedFiles = await Promise.all(
+      files.map((file) => this.saveFile(file))
+    );
+    this.logger.log(`Files uploaded successfully`, context);
+    return uploadedFiles;
+  }
+
   private async saveFile(requestData: Express.Multer.File): Promise<File> {
     if (!requestData) throw new FileException(FileValidation.FILE_NOT_FOUND);
     const file = new File();
@@ -57,5 +66,32 @@ export class FileService {
     if (!file) return;
     await this.fileRepository.remove(file);
     this.logger.log(`File ${filename} removed successfully`, context);
+  }
+
+  public handleDuplicateFilesName(files: Express.Multer.File[]): Express.Multer.File[] {
+    const fileNameCount: { [key: string]: number } = {};
+    const renamedFiles: Express.Multer.File[] = [];
+  
+    files.forEach((file) => {
+      const fileExtension = file.originalname.split('.').pop();
+      const baseName = file.originalname.replace(/\.[^/.]+$/, ''); 
+  
+      if (fileNameCount[baseName]) {
+        fileNameCount[baseName]++;
+      } else {
+        fileNameCount[baseName] = 1;
+      }
+  
+      const newName = fileNameCount[baseName] === 1
+        ? file.originalname
+        : `${baseName}(${fileNameCount[baseName] - 1}).${fileExtension}`;
+  
+      renamedFiles.push({
+        ...file,
+        originalname: newName,
+      });
+    });
+  
+    return renamedFiles;
   }
 }

@@ -28,7 +28,7 @@ import { OrderItemException } from "src/order-item/order-item.exception";
 import { TableException } from "src/table/table.exception";
 import { RobotConnectorException } from "src/robot-connector/robot-connector.exception";
 import { RobotConnectorValidation } from "src/robot-connector/robot-connector.validation";
-import { RobotResponseDto, WorkflowExecutionResponseDto } from "src/robot-connector/robot-connector.dto";
+import { QRLocationResponseDto, RobotResponseDto, WorkflowExecutionResponseDto } from "src/robot-connector/robot-connector.dto";
 import { RobotStatus } from "src/robot-connector/robot-connector.constants";
 import { WorkflowException } from "src/workflow/workflow.exception";
 import { CreateTrackingRequestDto } from "./tracking.dto";
@@ -107,7 +107,8 @@ describe('TrackingService', () => {
           provide: RobotConnectorClient, 
           useValue: {
             getRobotById: jest.fn(),
-            runWorkflow: jest.fn()
+            runWorkflow: jest.fn(),
+            getQRLocationById: jest.fn(),
           } 
         },
         {
@@ -424,78 +425,113 @@ describe('TrackingService', () => {
     });
   });
 
-  // describe('getLocationTableByOrder - get location of table by order', () => {
-  //   beforeEach(() => {
-  //     jest.clearAllMocks();
-  //   });
+  describe('getLocationTableByOrder - get location of table by order', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
 
-  //   it('should return null when table not found in this branch', async () => {
-  //     const branch = {
-  //       id: 'mock-branch-id',
-  //       name: "",
-  //       address: "",
-  //     } as Branch;
-  //     const mockInput = {
-  //       subtotal: 0,
-  //       status: "",
-  //       type: "",
-  //       tableName: 'mock-table-name',
-  //       branch,
-  //       orderItems: [],
-  //     } as Order;
+    it('should return null when table not found in this branch', async () => {
+      const branch = {
+        id: 'mock-branch-id',
+        name: "",
+        address: "",
+      } as Branch;
+      const mockInput = {
+        subtotal: 0,
+        status: "",
+        type: "",
+        tableName: 'mock-table-name',
+        branch,
+        orderItems: [],
+      } as Order;
 
-  //     (tableRepositoryMock.findOne as jest.Mock).mockResolvedValue(null);
-  //     await expect(service.getLocationTableByOrder(mockInput)).rejects.toThrow(TableException);
-  //   });
+      (tableRepositoryMock.findOne as jest.Mock).mockResolvedValue(null);
+      await expect(service.getLocationTableByOrder(mockInput)).rejects.toThrow(TableException);
+    });
 
-  //   it('should return null when table does not have location', async () => {
-  //     const branch = {
-  //       id: 'mock-branch-id',
-  //       name: "",
-  //       address: "",
-  //     } as Branch;
-  //     const mockInput = {
-  //       subtotal: 0,
-  //       status: "",
-  //       type: "",
-  //       tableName: 'mock-table-name',
-  //       branch,
-  //       orderItems: [],
-  //     } as Order;
+    it('should return null when table does not have location', async () => {
+      const branch = {
+        id: 'mock-branch-id',
+        name: "",
+        address: "",
+      } as Branch;
+      const mockInput = {
+        subtotal: 0,
+        status: "",
+        type: "",
+        tableName: 'mock-table-name',
+        branch,
+        orderItems: [],
+      } as Order;
 
-  //     const table = {
-  //       name: "",
-  //       location: null
-  //     } as Table;
+      const table = {
+        name: "",
+        location: null
+      } as Table;
 
-  //     (tableRepositoryMock.findOne as jest.Mock).mockResolvedValue(table);
-  //     await expect(service.getLocationTableByOrder(mockInput)).rejects.toThrow(TableException);
-  //   });
+      (tableRepositoryMock.findOne as jest.Mock).mockResolvedValue(table);
+      await expect(service.getLocationTableByOrder(mockInput)).rejects.toThrow(TableException);
+    });
 
-  //   it('should return location table', async () => {
-  //     const branch = {
-  //       id: 'mock-branch-id',
-  //       name: "",
-  //       address: "",
-  //     } as Branch;
-  //     const mockInput = {
-  //       subtotal: 0,
-  //       status: "",
-  //       type: "",
-  //       tableName: 'mock-table-name',
-  //       branch,
-  //       orderItems: [],
-  //     } as Order;
+    it('should throw exception when get QR code', async () => {
+      const branch = {
+        id: 'mock-branch-id',
+        name: "",
+        address: "",
+      } as Branch;
+      const mockInput = {
+        subtotal: 0,
+        status: "",
+        type: "",
+        tableName: 'mock-table-name',
+        branch,
+        orderItems: [],
+      } as Order;
 
-  //     const table = {
-  //       name: "",
-  //       location: 'mock-location-table',
-  //     } as Table;
+      const table = {
+        name: "",
+        location: 'mock-location-table',
+      } as Table;
 
-  //     (tableRepositoryMock.findOne as jest.Mock).mockResolvedValue(table);
-  //     expect(await service.getLocationTableByOrder(mockInput)).toEqual(table.location);
-  //   });
-  // });
+      (tableRepositoryMock.findOne as jest.Mock).mockResolvedValue(table);
+      (robotConnectorClientMock.getQRLocationById as jest.Mock).mockRejectedValue(
+        new RobotConnectorException(RobotConnectorValidation.GET_LOCATION_FROM_ROBOT_API_FAILED)
+      );
+      await expect(service.getLocationTableByOrder(mockInput)).rejects.toThrow(
+        RobotConnectorException
+      );
+    });
+    it('should return location table', async () => {
+      const branch = {
+        id: 'mock-branch-id',
+        name: "",
+        address: "",
+      } as Branch;
+      const mockInput = {
+        subtotal: 0,
+        status: "",
+        type: "",
+        tableName: 'mock-table-name',
+        branch,
+        orderItems: [],
+      } as Order;
+
+      const table = {
+        name: "",
+        location: 'mock-location-table',
+      } as Table;
+
+      const locationData = {
+        id: "",
+        name: "",
+        qr_code: "mock-location",
+      } as QRLocationResponseDto;
+
+      (tableRepositoryMock.findOne as jest.Mock).mockResolvedValue(table);
+      (robotConnectorClientMock.getQRLocationById as jest.Mock).mockResolvedValue(locationData);
+      expect(await service.getLocationTableByOrder(mockInput)).toEqual(locationData.qr_code);
+    });
+  });
 
   describe('createTrackingAndTrackingOrderItem - create tracking and related tracking order item',  () => {
     it('should save tracking failed', async () => {

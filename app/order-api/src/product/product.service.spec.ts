@@ -40,7 +40,9 @@ describe('ProductService', () => {
           provide: FileService,
           useValue: {
             removeFile: jest.fn(),
-            uploadFile: jest.fn()
+            uploadFile: jest.fn(),
+            uploadFiles: jest.fn(),
+            handleDuplicateFilesName: jest.fn(),
           },
         },
         {
@@ -411,13 +413,53 @@ describe('ProductService', () => {
         path: '',
         buffer: undefined
       } as Express.Multer.File;
+      const mockFiles = [mockFile];
 
       (productRepositoryMock.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.uploadMultiProductImages(
         'mock-product-slug',
-        mockFile
+        mockFiles
       )).rejects.toThrow(ProductException);
+    });
+
+    it('should upload success', async () => {
+      const product = {
+        name: '',
+      } as Product;
+      const mockFile = {
+        fieldname: '',
+        originalname: '',
+        encoding: '',
+        mimetype: '',
+        size: 0,
+        destination: '',
+        filename: 'mock-name-image-add',
+        path: '',
+        buffer: undefined
+      } as Express.Multer.File;
+      const mockFiles = [mockFile];
+      const file = {
+        name: '',
+        extension: '',
+        mimetype: '',
+        data: '',
+        size: 0,
+        id: '',
+        slug: '',
+      } as File;
+      const files = [file];
+
+      (productRepositoryMock.findOne as jest.Mock).mockResolvedValue(product);
+      (fileService.handleDuplicateFilesName as jest.Mock).mockReturnValue(mockFiles);
+      (fileService.uploadFiles as jest.Mock).mockResolvedValue(files);
+      (productRepositoryMock.save as jest.Mock).mockResolvedValue(product);
+      (mapperMock.map as jest.Mock).mockReturnValue(product);
+
+      expect(await service.uploadMultiProductImages(
+        'mock-product-slug',
+        mockFiles
+      )).toEqual(product);
     });
   });
 });
