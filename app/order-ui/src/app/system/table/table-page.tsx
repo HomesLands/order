@@ -90,7 +90,6 @@ export default function TablePage() {
 
   const handleStatusChange = (tableId: string, status: TableStatus) => {
     // Implement status change logic here
-    console.log('Status changed:', tableId, status)
     updateTableStatus(
       { slug: tableId, status },
       {

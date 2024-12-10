@@ -15,8 +15,7 @@ export async function getUsers(
 
 export async function resetPassword(user: string): Promise<IApiResponse<null>> {
   const response = await http.post<IApiResponse<null>>(
-    '/user/reset-password',
-    user,
+    `/user/${user}/reset-password`,
   )
   return response.data
 }

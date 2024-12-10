@@ -32,7 +32,9 @@
     "info": "Info",
     "warn": "Warn",
     "error": "Error",
-    "debug": "Debug"
+    "debug": "Debug",
+    "isTemplate": "Mẫu thực đơn",
+    "noTemplate": "Không phải mẫu thực đơn"
   },
   "dayOfWeek": {
     "0": "Thứ hai",
@@ -41,6 +43,7 @@
     "3": "Thứ năm",
     "4": "Thứ sáu",
     "5": "Thứ bảy",
-    "6": "Chủ nhật"
+    "6": "Chủ nhật",
+    "noDayOfWeek": "Không có"
   }
 }

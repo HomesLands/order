@@ -2,7 +2,7 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
-  InternalAxiosRequestConfig
+  InternalAxiosRequestConfig,
 } from 'axios'
 import NProgress from 'nprogress'
 import moment from 'moment'
@@ -18,7 +18,10 @@ import { showErrorToast } from './toast'
 NProgress.configure({ showSpinner: false, trickleSpeed: 200 })
 
 let isRefreshing = false
-let failedQueue: { resolve: (token: string) => void; reject: (error: unknown) => void }[] = []
+let failedQueue: {
+  resolve: (token: string) => void
+  reject: (error: unknown) => void
+}[] = []
 
 const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue.forEach((prom) => {
@@ -40,7 +43,7 @@ const isTokenExpired = (expiryTime: string): boolean => {
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,
   timeout: 10000,
-  withCredentials: true
+  withCredentials: true,
 })
 
 axiosInstance.interceptors.request.use(
@@ -54,10 +57,8 @@ axiosInstance.interceptors.request.use(
       setLogout,
       setRefreshToken,
       setExpireTimeRefreshToken,
-      isAuthenticated
+      isAuthenticated,
     } = useAuthStore.getState()
-
-    // console.log('Request interceptor - Initial token check:', token, isAuthenticated())
 
     // Allow requests to public routes (login, register, etc.)
     const publicRoutes = ['/auth/login', '/auth/register', '/auth/refresh']
@@ -72,18 +73,15 @@ axiosInstance.interceptors.request.use(
 
     // Get fresh token state
     const currentToken = useAuthStore.getState().token
-    // console.log('Request interceptor - Current token before setting header:', currentToken)
 
     if (expireTime && isTokenExpired(expireTime) && !isRefreshing) {
       isRefreshing = true
       try {
-        const response: AxiosResponse<IApiResponse<IRefreshTokenResponse>> = await axios.post(
-          `${baseURL}/auth/refresh`,
-          {
+        const response: AxiosResponse<IApiResponse<IRefreshTokenResponse>> =
+          await axios.post(`${baseURL}/auth/refresh`, {
             refreshToken,
-            expiredToken: token
-          }
-        )
+            expiredToken: token,
+          })
 
         const newToken = response.data.result.token
         setToken(newToken)
@@ -111,7 +109,7 @@ axiosInstance.interceptors.request.use(
           },
           reject: (error: unknown) => {
             reject(error)
-          }
+          },
         })
       })
     }
@@ -134,7 +132,7 @@ axiosInstance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error)
-  }
+  },
 )
 
 axiosInstance.interceptors.response.use(
@@ -160,11 +158,13 @@ axiosInstance.interceptors.response.use(
       // }
     }
     return Promise.reject(error)
-  }
+  },
 )
 
 async function setProgressBarDone() {
-  useRequestStore.setState({ requestQueueSize: useRequestStore.getState().requestQueueSize - 1 })
+  useRequestStore.setState({
+    requestQueueSize: useRequestStore.getState().requestQueueSize - 1,
+  })
   if (useRequestStore.getState().requestQueueSize > 0) {
     NProgress.inc()
   } else {
@@ -186,7 +186,7 @@ axiosInstance.interceptors.request.use(
   (error) => {
     useLoadingStore.getState().setIsLoading(false)
     return Promise.reject(error)
-  }
+  },
 )
 
 axiosInstance.interceptors.response.use(
@@ -197,7 +197,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     useLoadingStore.getState().setIsLoading(false)
     return Promise.reject(error)
-  }
+  },
 )
 
 export default axiosInstance

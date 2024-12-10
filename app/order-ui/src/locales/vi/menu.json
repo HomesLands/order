@@ -28,6 +28,8 @@
     "title": "Quản lý thực đơn",
     "createdAt": "Ngày tạo",
     "totalItems": "Tổng số món",
+    "dayIndex": "Ngày thứ",
+    "noTemplate": "Không phải mẫu thực đơn",
     "stock": "Tồn kho",
     "noDescription": "Không có mô tả",
 
@@ -158,6 +160,8 @@
     "orderDate": "Ngày đặt hàng",
     "phoneNumber": "Số điện thoại",
 
+    "total": "Số tiền thanh toán: ",
+    "paymentNote": "Quý khách vui lòng kiển tra thông tin thanh toán toán trước khi thực hiện giao dịch",
     "pending": "Chờ xác nhận",
     "paid": "Đã thanh toán",
     "canceled": "Đã hủy"

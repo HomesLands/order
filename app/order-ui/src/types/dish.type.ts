@@ -56,6 +56,9 @@ export interface IOrderOwner {
 export interface IPayment extends IBase {
   paymentMethod: string
   message: string
+  amount: number
+  qrCode: string
+  userId: string
   transactionId: string
   statusCode: string
   statusMessage: string

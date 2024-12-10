@@ -122,12 +122,10 @@ export const useCartItemStore = create<ICartItemStore>()(
 
       removeCartItem: (cartItemId: string) => {
         const { cartItems } = get()
-        console.log('Remove cart item', cartItemId)
         if (cartItems) {
           const itemToRemove = cartItems.orderItems.find(
             (item) => item.id === cartItemId,
           )
-          console.log('Item to remove', itemToRemove)
           if (itemToRemove && itemToRemove.quantity > 1) {
             // If quantity > 1, decrease quantity by 1
             const updatedOrderItems = cartItems.orderItems.map((orderItem) =>

@@ -4,6 +4,7 @@ import { IProduct } from './product.type'
 export interface IMenu extends IBase {
   date: string
   branchSlug: string
+  dayIndex: number
   isTemplate: boolean
   menuItems: IMenuItem[]
 }

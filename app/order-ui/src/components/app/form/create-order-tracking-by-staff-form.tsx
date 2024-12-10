@@ -38,8 +38,6 @@ export const CreateOrderTrackingByStaffForm: React.FC<
   const { getOrder, addOrder } = useOrderStore()
   // const { refetch } = useOrderBySlug(getOrder()?.slug as string)
 
-  console.log(getOrder())
-
   const form = useForm<TCreateOrderTrackingByStaffSchema>({
     resolver: zodResolver(createOrderTrackingByStaffSchema),
 

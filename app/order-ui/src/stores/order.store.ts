@@ -75,21 +75,16 @@ export const useOrderTrackingStore = create<IOrderTrackingStore>()(
       },
 
       removeSelectedItem: (itemId: string) => {
-        console.log('Removing item:', itemId)
         const currentItems = get().selectedItems
-        console.log('Current items:', currentItems)
         const parts = itemId.split('-') // Tách chuỗi thành các phần
         const orderId = parts.slice(0, -1).join('-')
         // const [orderId] = itemId.split('-')
-        console.log('Order ID:', orderId)
 
         set({
           selectedItems: currentItems
             .map((item) => {
               if (item.slug === orderId) {
-                console.log('Found item:', item)
                 const newQuantity = item.quantity - 1
-                console.log('New quantity:', newQuantity)
                 if (newQuantity === 0) return null
                 return {
                   ...item,

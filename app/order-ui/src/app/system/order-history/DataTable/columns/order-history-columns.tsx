@@ -26,7 +26,6 @@ export const useOrderHistoryColumns = (): ColumnDef<IOrder>[] => {
   const { mutate: exportOrderInvoice } = useExportOrderInvoice()
 
   const handleExportOrderInvoice = (slug: string) => {
-    // console.log('exportOrderInvoice', order)
     exportOrderInvoice(slug, {
       onSuccess: () => {
         showToast(tToast('toast.exportInvoiceSuccess'))

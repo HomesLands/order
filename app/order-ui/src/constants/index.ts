@@ -1,4 +1,4 @@
-export * from './authority'
+export * from './role'
 export * from './env'
 export * from './logger'
 export * from './menu'

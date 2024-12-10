@@ -44,7 +44,6 @@ export default function OrderItemDetail({ order }: OrderItemDetailProps) {
     itemIndex: number,
   ) => {
     const key = `${orderItem.slug}-${itemIndex}`
-    console.log('check checked:', checked, key)
 
     if (checked === true) {
       setSelectedIndexes((prev) => ({ ...prev, [key]: true }))

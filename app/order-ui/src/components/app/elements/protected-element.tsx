@@ -7,14 +7,14 @@ import { useCallback, useEffect } from 'react'
 
 export default function ProtectedElement({
   element,
-  //   allowedAuthorities,
+  allowedRoles,
 }: {
   element: React.ReactNode
-  //   allowedAuthorities: string[]
+  allowedRoles: string[]
 }) {
   const { isAuthenticated, setLogout } = useAuthStore()
   const { t } = useTranslation('auth')
-  const { removeUserInfo } = useUserStore()
+  const { removeUserInfo, userInfo } = useUserStore()
   //   const { clearUserRoles, userRoles } = useUserInfoPermissionsStore()
   const navigate = useNavigate()
 
@@ -27,18 +27,16 @@ export default function ProtectedElement({
   }, [setLogout, removeUserInfo, navigate])
 
   const hasRequiredPermissions = useCallback(() => {
-    // return userRoles.some((userRole) =>
-    //   userRole.authorities.some((authority) => allowedAuthorities.includes(authority))
-    // )
-    return true
-  }, [])
+    if (!userInfo || !allowedRoles) return false;
+    const userRole = userInfo.role?.name;
+    return allowedRoles.includes(userRole);
+  }, [userInfo, allowedRoles]);
 
   // Check authentication and permissions
   useEffect(() => {
     if (!isAuthenticated()) {
       handleLogout()
     } else if (!hasRequiredPermissions()) {
-      console.log(!hasRequiredPermissions())
       // toast.error(t('accessDenied')) // Using translation for error message
       navigate(ROUTE.LOGIN)
     }

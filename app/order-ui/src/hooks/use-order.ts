@@ -4,6 +4,7 @@ import {
   createOrder,
   createOrderTracking,
   exportOrderInvoice,
+  exportPaymentQRCode,
   getAllOrders,
   getOrderBySlug,
   getOrderInvoice,
@@ -69,6 +70,14 @@ export const useExportOrderInvoice = () => {
   return useMutation({
     mutationFn: async (slug: string) => {
       return exportOrderInvoice(slug)
+    },
+  })
+}
+
+export const useExportPayment = () => {
+  return useMutation({
+    mutationFn: async (slug: string) => {
+      return exportPaymentQRCode(slug)
     },
   })
 }

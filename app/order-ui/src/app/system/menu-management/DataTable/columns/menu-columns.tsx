@@ -41,6 +41,26 @@ export const useMenusColumns = (): ColumnDef<IMenu>[] => {
       },
     },
     {
+      accessorKey: 'dayIndex',
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t('menu.dayIndex')} />
+      ),
+      cell: ({ row }) => {
+        const dayIndex = row.getValue('dayIndex')
+        return dayIndex ? tCommon(`dayOfWeek.${dayIndex}`) : tCommon(`dayOfWeek.noDayOfWeek`)
+      },
+    },
+    {
+      accessorKey: 'isTemplate',
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t('menu.isTemplate')} />
+      ),
+      cell: ({ row }) => {
+        const isTemplate = row.getValue('isTemplate')
+        return isTemplate ? t(`menu.isTemplate`) : t(`menu.noTemplate`)
+      },
+    },
+    {
       accessorKey: 'menuItems',
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t('menu.totalItems')} />

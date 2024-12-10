@@ -45,7 +45,6 @@ export async function deleteTable(slug: string): Promise<IApiResponse<null>> {
 export async function updateTableStatus(
   params: IUpdateTableStatusRequest,
 ): Promise<IApiResponse<ITable>> {
-  console.log(params)
   const response = await http.patch<IApiResponse<ITable>>(
     `/tables/${params.slug}/status`,
     { status: params.status },

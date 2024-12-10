@@ -33,8 +33,6 @@ export default function DeleteTableDialog({ table, onContextOpen }: DeleteTableD
   const { mutate: deleteTable } = useDeleteTable()
   const [isOpen, setIsOpen] = useState(false)
 
-  console.log('table', table)
-
   const handleSubmit = (tableSlug: string) => {
     deleteTable(tableSlug, {
       onSuccess: () => {

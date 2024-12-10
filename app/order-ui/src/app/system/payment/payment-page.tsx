@@ -4,10 +4,11 @@ import moment from 'moment'
 import { useTranslation } from 'react-i18next'
 
 import { Button, ScrollArea } from '@/components/ui'
-import { useInitiatePayment, useOrderBySlug } from '@/hooks'
+import { useExportPayment, useInitiatePayment, useOrderBySlug } from '@/hooks'
 import { PaymentMethod, ROUTE } from '@/constants'
 import { PaymentMethodSelect } from '@/app/system/payment'
-import { QrCodeDialog } from '@/components/app/dialog'
+import { showToast } from '@/utils'
+// import { QrCodeDialog } from '@/components/app/dialog'
 
 export default function PaymentPage() {
   const { t } = useTranslation(['menu'])
@@ -16,7 +17,9 @@ export default function PaymentPage() {
   const [paymentMethod, setPaymentMethod] = useState<string>('')
   const { data: order, refetch: refetchOrder } = useOrderBySlug(slug as string)
   const { mutate: initiatePayment } = useInitiatePayment()
+  const { mutate: exportPayment } = useExportPayment()
   const [qrCode, setQrCode] = useState<string>('')
+  const [paymentSlug, setPaymentSlug] = useState<string>('')
   const [isPolling, setIsPolling] = useState<boolean>(false)
 
   // Tạo biến để kiểm tra trạng thái nút xác nhận
@@ -56,6 +59,7 @@ export default function PaymentPage() {
         { orderSlug: slug, paymentMethod },
         {
           onSuccess: (data) => {
+            setPaymentSlug(data.result.slug)
             setQrCode(data.result.qrCode)
             setIsPolling(true) // Bắt đầu polling khi thanh toán qua chuyển khoản ngân hàng
           },
@@ -71,6 +75,18 @@ export default function PaymentPage() {
         },
       )
     }
+  }
+
+  const handleExportPayment = () => {
+    if (!slug) return
+    exportPayment(
+      paymentSlug,
+      {
+        onSuccess: () => {
+          showToast(t('paymentMethod.exportPaymentSuccess'))
+        },
+      },
+    )
   }
 
   return (
@@ -210,22 +226,33 @@ export default function PaymentPage() {
                     </div>
                   </div>
                   {/* Lựa chọn phương thức thanh toán */}
-                  <PaymentMethodSelect onSubmit={handleSelectPaymentMethod} />
+                  <PaymentMethodSelect qrCode={qrCode ? qrCode : ''} total={order.result ? order.result.subtotal : ''} onSubmit={handleSelectPaymentMethod} />
                 </div>
               )}
-              <div className="flex justify-end">
+              <div className="flex justify-end py-6">
                 {(paymentMethod === PaymentMethod.BANK_TRANSFER || paymentMethod === PaymentMethod.CASH) && (
-                  <Button
-                    disabled={isDisabled}
-                    className="w-fit"
-                    onClick={handleConfirmPayment}
-                  >
-                    {t('paymentMethod.confirmPayment')}
-                  </Button>
+                  <div>
+                    <Button
+                      disabled={isDisabled}
+                      className="w-fit"
+                      onClick={handleConfirmPayment}
+                    >
+                      {t('paymentMethod.confirmPayment')}
+                    </Button>
+                    {paymentSlug && (
+                      <Button
+                        disabled={isDisabled}
+                        className="w-fit"
+                        onClick={handleExportPayment}
+                      >
+                        {t('paymentMethod.exportPayment')}
+                      </Button>
+                    )}
+                  </div>
                 )}
 
               </div>
-              {qrCode && <QrCodeDialog qrCode={qrCode} />}
+              {/* {qrCode && <QrCodeDialog qrCode={qrCode} />} */}
             </div>
           </div>
         </div>

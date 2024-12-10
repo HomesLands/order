@@ -9,7 +9,7 @@ import {
   ICreateOrderRequest,
   IInitiatePaymentRequest,
   ICreateOrderResponse,
-  IInitiatePaymentResponse,
+  IPayment,
   ICreateOrderTrackingRequest,
   IOrderTracking,
   IOrderInvoice,
@@ -58,12 +58,43 @@ export async function createOrder(
 
 export async function initiatePayment(
   params: IInitiatePaymentRequest,
-): Promise<IApiResponse<IInitiatePaymentResponse>> {
-  const response = await http.post<IApiResponse<IInitiatePaymentResponse>>(
+): Promise<IApiResponse<IPayment>> {
+  const response = await http.post<IApiResponse<IPayment>>(
     `/payment/initiate`,
     params,
   )
   return response.data
+}
+
+export async function exportPaymentQRCode(
+  slug: string,
+): Promise<IApiResponse<string>> {
+  const { setProgress, setFileName, setIsDownloading, reset } =
+    useDownloadStore.getState()
+  const currentDate = moment(new Date()).format('DD/MM/YYYY')
+  setFileName(`TREND Coffee QR Code-${currentDate}.pdf`)
+  setIsDownloading(true)
+  try {
+    const response = await http.post(`payment/${slug}/export`, {
+      responseType: 'blob',
+      headers: {
+        Accept: 'application/pdf',
+      },
+      onDownloadProgress: (progressEvent) => {
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / (progressEvent.total ?? 1),
+        )
+        setProgress(percentCompleted)
+      },
+      doNotShowLoading: true,
+    } as AxiosRequestConfig)
+    const blob = new Blob([response.data], { type: 'application/pdf' })
+    saveAs(blob, `TREND Coffee QR Code-${currentDate}.pdf`)
+    return response.data
+  } finally {
+    setIsDownloading(false)
+    reset()
+  }
 }
 
 export async function createOrderTracking(
@@ -114,7 +145,6 @@ export async function exportOrderInvoice(
         doNotShowLoading: true,
       } as AxiosRequestConfig,
     )
-    console.log('response', response)
     const blob = new Blob([response.data], { type: 'application/pdf' })
     saveAs(blob, `TREND Coffee Invoice-${currentDate}.pdf`)
     return response.data

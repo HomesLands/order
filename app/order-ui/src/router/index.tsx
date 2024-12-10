@@ -4,7 +4,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import { Suspense } from 'react'
 import { SkeletonCart } from '@/components/app/skeleton'
 import { SuspenseElement } from '@/components/app/elements'
-import { ROUTE } from '@/constants'
+import { Role, ROUTE } from '@/constants'
 import {
   HomePage,
   MenuPage,
@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={HomePage} />}
           />
         ),
@@ -71,7 +71,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={MenuPage} />}
           />
         ),
@@ -90,7 +90,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={ConfirmOrderPage} />}
           />
         ),
@@ -109,7 +109,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={OrderPaymentPage} />}
           />
         ),
@@ -128,7 +128,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={OrderSuccessPage} />}
           />
         ),
@@ -147,7 +147,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={OrderManagementPage} />}
           />
         ),
@@ -166,7 +166,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={OrderHistoryPage} />}
           />
         ),
@@ -185,7 +185,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={OrderDetailPage} />}
           />
         ),
@@ -204,7 +204,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={TablePage} />}
           />
         ),
@@ -223,7 +223,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={ProductManagementPage} />}
           />
         ),
@@ -242,7 +242,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={ProductDetailPage} />}
           />
         ),
@@ -261,7 +261,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={MenuManagementPage} />}
           />
         ),
@@ -280,7 +280,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={MenuDetailPage} />}
           />
         ),
@@ -299,7 +299,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={UserListPage} />}
           />
         ),
@@ -318,7 +318,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={LoggerPage} />}
           />
         ),
@@ -337,7 +337,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={ProfilePage} />}
           />
         ),
@@ -356,7 +356,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedElement
-            // allowedAuthorities={[Authority.READ_USER]}
+            allowedRoles={[Role.ADMIN]}
             element={<SuspenseElement component={BankConfigPage} />}
           />
         ),
