@@ -42,7 +42,7 @@ export async function deleteSystemConfigs({
   slug: string
 }): Promise<IApiResponse<null>> {
   const response = await http.delete<IApiResponse<null>>('/system-config', {
-    params: {
+    data: {
       key,
       slug,
     },
