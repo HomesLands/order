@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { AxiosError, isAxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { Trash2, TriangleAlert } from 'lucide-react'
 
@@ -15,10 +14,10 @@ import {
     DialogTrigger,
 } from '@/components/ui'
 
-import { IApiResponse, ISystemConfig } from '@/types'
+import { ISystemConfig } from '@/types'
 
 import { useDeleteSystemConfig } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 
 export default function DeleteSystemConfigDialog({
     systemConfig,
@@ -43,13 +42,6 @@ export default function DeleteSystemConfigDialog({
                 onClose()
                 setIsOpen(false)
                 showToast(tToast('toast.deleteSystemConfigSuccess'))
-            },
-            onError: (error) => {
-                if (isAxiosError(error)) {
-                    const axiosError = error as AxiosError<IApiResponse<void>>
-                    if (axiosError.response?.data.code)
-                        showErrorToast(axiosError.response.data.code)
-                }
             },
         })
     }

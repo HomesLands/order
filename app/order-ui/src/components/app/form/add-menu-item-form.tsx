@@ -17,11 +17,9 @@ import {
 import { addMenuItemSchema, TAddMenuItemSchema } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IAddMenuItemRequest, IApiResponse, IProduct } from '@/types'
+import { IAddMenuItemRequest, IProduct } from '@/types'
 import { useAddMenuItem } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
-import { isAxiosError } from 'axios'
-import { AxiosError } from 'axios'
+import { showToast } from '@/utils'
 
 interface IFormAddMenuItemProps {
   product: IProduct
@@ -55,13 +53,6 @@ export const AddMenuItemForm: React.FC<IFormAddMenuItemProps> = ({
         onSubmit(false)
         form.reset()
         showToast(t('toast.addMenuItemSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

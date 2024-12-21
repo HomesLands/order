@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react'
-import { AxiosError, isAxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { Upload } from 'lucide-react'
 import { PlusCircledIcon } from '@radix-ui/react-icons'
@@ -15,8 +14,8 @@ import {
 } from '@/components/ui'
 
 import { useUploadProductImage } from '@/hooks'
-import { IApiResponse, IProduct } from '@/types'
-import { showErrorToast, showToast } from '@/utils'
+import { IProduct } from '@/types'
+import { showToast } from '@/utils'
 
 interface ICreateProductDialogProps {
   product: IProduct
@@ -42,13 +41,6 @@ export default function UploadProductImageDialog({ product }: ICreateProductDial
           showToast(tToast('toast.uploadImageSuccess'))
           setIsOpen(false)
           setPreviewImage(null)
-        },
-        onError: (error) => {
-          if (isAxiosError(error)) {
-            const axiosError = error as AxiosError<IApiResponse<void>>
-            if (axiosError.response?.data.code)
-              showErrorToast(axiosError.response.data.code)
-          }
         },
       }
     )

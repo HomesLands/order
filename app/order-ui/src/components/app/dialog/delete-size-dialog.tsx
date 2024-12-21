@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { AxiosError, isAxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { Trash2, TriangleAlert } from 'lucide-react'
 
@@ -14,10 +13,10 @@ import {
   DialogTrigger
 } from '@/components/ui'
 
-import { IApiResponse, ISize } from '@/types'
+import { ISize } from '@/types'
 
 import { useDeleteSize } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 
 export default function DeleteSizeDialog({ size }: { size: ISize }) {
@@ -37,12 +36,6 @@ export default function DeleteSizeDialog({ size }: { size: ISize }) {
         setIsOpen(false)
         showToast(tToast('toast.deleteSizeSuccess'))
       },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code) showErrorToast(axiosError.response.data.code)
-        }
-      }
     })
   }
 

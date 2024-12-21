@@ -19,10 +19,9 @@ import {
 } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, ISystemConfig } from '@/types'
+import { ISystemConfig } from '@/types'
 import { useUpdateSystemConfig } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
-import { AxiosError, isAxiosError } from 'axios'
+import { showToast } from '@/utils'
 
 interface IFormUpdateSystemConfigProps {
     systemConfig?: ISystemConfig
@@ -54,13 +53,6 @@ export const UpdateSystemConfigForm: React.FC<
                 onSubmit(false)
                 form.reset()
                 showToast(t('toast.updateSystemConfigSuccess'))
-            },
-            onError: (error) => {
-                if (isAxiosError(error)) {
-                    const axiosError = error as AxiosError<IApiResponse<void>>
-                    if (axiosError.response?.data.code)
-                        showErrorToast(axiosError.response.data.code)
-                }
             },
         })
     }

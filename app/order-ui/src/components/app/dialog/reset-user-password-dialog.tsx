@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { AxiosError, isAxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { KeyRound, TriangleAlert } from 'lucide-react'
 
@@ -14,10 +13,10 @@ import {
     DialogTrigger,
 } from '@/components/ui'
 
-import { IApiResponse, IUserInfo } from '@/types'
+import { IUserInfo } from '@/types'
 
 import { useResetPassword } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 
 export default function ResetPasswordDialog({
@@ -40,13 +39,6 @@ export default function ResetPasswordDialog({
                 })
                 setIsOpen(false)
                 showToast(tToast('toast.resetPasswordSuccess'))
-            },
-            onError: (error) => {
-                if (isAxiosError(error)) {
-                    const axiosError = error as AxiosError<IApiResponse<void>>
-                    if (axiosError.response?.data.code)
-                        showErrorToast(axiosError.response.data.code)
-                }
             },
         })
     }

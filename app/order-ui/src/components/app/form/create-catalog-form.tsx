@@ -16,11 +16,9 @@ import {
 import { createCatalogSchema, TCreateCatalogSchema } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, ICreateCatalogRequest } from '@/types'
+import { ICreateCatalogRequest } from '@/types'
 import { useCreateCatalog } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
-import { isAxiosError } from 'axios'
-import { AxiosError } from 'axios'
+import { showToast } from '@/utils'
 
 interface IFormCreateCatalogProps {
   onSubmit: (isOpen: boolean) => void
@@ -49,13 +47,6 @@ export const CreateCatalogForm: React.FC<IFormCreateCatalogProps> = ({
         onSubmit(false)
         form.reset()
         showToast(t('toast.createCatalogSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

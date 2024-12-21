@@ -16,10 +16,9 @@ import {
 import { updatePasswordSchema, TUpdatePasswordSchema } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, IUpdatePasswordRequest } from '@/types'
+import { IUpdatePasswordRequest } from '@/types'
 import { useUpdatePassword } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
-import { AxiosError, isAxiosError } from 'axios'
+import { showToast } from '@/utils'
 
 interface IFormUpdatePasswordProps {
     onSubmit: (isOpen: boolean) => void
@@ -49,13 +48,6 @@ export const UpdatePasswordForm: React.FC<IFormUpdatePasswordProps> = ({
                 onSubmit(false)
                 form.reset()
                 showToast(t('toast.updatePasswordSuccess'))
-            },
-            onError: (error) => {
-                if (isAxiosError(error)) {
-                    const axiosError = error as AxiosError<IApiResponse<void>>
-                    if (axiosError.response?.data.code)
-                        showErrorToast(axiosError.response.data.code)
-                }
             },
         })
     }

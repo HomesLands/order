@@ -16,16 +16,14 @@ import {
 import { updateMenuSchema, TUpdateMenuSchema } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IUpdateMenuRequest, IMenu, IApiResponse } from '@/types'
+import { IUpdateMenuRequest, IMenu } from '@/types'
 import { useUpdateMenu } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { BranchSelect } from '@/components/app/select'
 import { cn } from '@/lib'
 import { useUserStore } from '@/stores'
 import moment from 'moment'
-import { IsTemplateSwitch } from '../switch'
-import { isAxiosError } from 'axios'
-import { AxiosError } from 'axios'
+import { IsTemplateSwitch } from '@/components/app/switch'
 
 interface IFormUpdateMenuProps {
   menu: IMenu
@@ -62,13 +60,6 @@ export const UpdateMenuForm: React.FC<IFormUpdateMenuProps> = ({
         onSubmit(false)
         form.reset()
         showToast(t('toast.updateMenuSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

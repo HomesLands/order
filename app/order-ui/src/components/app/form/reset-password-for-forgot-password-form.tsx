@@ -1,7 +1,6 @@
 import React from 'react'
 import { NavLink, useNavigate, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { isAxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -21,7 +20,7 @@ import { ButtonLoading } from '@/components/app/loading'
 import { ROUTE } from '@/constants'
 import { useResetPasswordForForgotPassword } from '@/hooks'
 
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 
 export const ResetPasswordForForgotPasswordForm: React.FC = () => {
     const { t } = useTranslation(['auth'])
@@ -44,19 +43,6 @@ export const ResetPasswordForForgotPasswordForm: React.FC = () => {
                 showToast(t('toast.resetPasswordSuccess'))
                 navigate(ROUTE.LOGIN)
             },
-            onError: (error) => {
-                if (isAxiosError(error)) {
-                    if (error.code === 'ECONNABORTED') {
-                        showToast(error.response?.data?.errorCode)
-                        return
-                    }
-                    if (error.code === 'ERR_NETWORK') {
-                        showErrorToast(error.response?.data?.errorCode)
-                        return
-                    }
-                    showErrorToast(error.response?.data?.statusCode)
-                }
-            }
         })
     }
 

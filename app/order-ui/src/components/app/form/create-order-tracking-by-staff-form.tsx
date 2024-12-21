@@ -18,13 +18,11 @@ import {
 } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, ICreateOrderTrackingRequest, IOrder } from '@/types'
+import { ICreateOrderTrackingRequest, IOrder } from '@/types'
 import { useCreateOrderTracking } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { useOrderStore, useOrderTrackingStore } from '@/stores'
 import { Label } from '@radix-ui/react-dropdown-menu'
-import { isAxiosError } from 'axios'
-import { AxiosError } from 'axios'
 
 interface IFormDeliverByStaffProps {
   onSubmit: (isOpen: boolean) => void
@@ -83,13 +81,6 @@ export const CreateOrderTrackingByStaffForm: React.FC<
         } catch (error) {
           console.error('Error updating order store:', error)
           showToast(t('toast.errorUpdatingOrder'))
-        }
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
         }
       },
     })

@@ -62,15 +62,6 @@ export const LoginForm: React.FC = () => {
           navigate(ROUTE.STAFF_MENU, { replace: true })
           showToast(t('toast.loginSuccess'))
         },
-        onError: (error) => {
-          if (isAxiosError(error)) {
-            if (error.code === 'ECONNABORTED' || error.code === 'ERR_NETWORK') {
-              showErrorToast(error.response?.data?.errorCode)
-              return
-            }
-            showErrorToast(error.response?.data?.statusCode)
-          }
-        },
       })
     } catch (error) {
       if (isAxiosError(error)) {

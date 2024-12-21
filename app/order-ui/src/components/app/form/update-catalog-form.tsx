@@ -15,11 +15,10 @@ import {
 import { updateCatalogSchema, TUpdateCatalogSchema } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, ICatalog, IUpdateCatalogRequest } from '@/types'
+import { ICatalog, IUpdateCatalogRequest } from '@/types'
 import { useUpdateCatalog } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
-import { AxiosError, isAxiosError } from 'axios'
 
 interface IFormUpdateCatalogProps {
   catalog: ICatalog
@@ -48,13 +47,6 @@ export const UpdateCatalogForm: React.FC<IFormUpdateCatalogProps> = ({ catalog, 
         onSubmit(false)
         form.reset()
         showToast(t('toast.updateCatalogSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

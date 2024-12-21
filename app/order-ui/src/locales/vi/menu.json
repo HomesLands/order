@@ -100,6 +100,7 @@
     "orderSuccess": "Đặt hàng thành công",
 
     "paymentStatus": "Thanh toán",
+    "orderStatus": "Trạng thái",
     "cash": "Tiền mặt",
     "bankTransfer": "Chuyển khoản ngân hàng",
     "pending": "Chưa được giao",

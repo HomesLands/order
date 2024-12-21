@@ -14,11 +14,10 @@ import {
   Button,
   ScrollArea,
 } from '@/components/ui'
-import { IAddMenuItemRequest, IApiResponse } from '@/types'
+import { IAddMenuItemRequest } from '@/types'
 import { useAddMenuItems } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { useMenuItemStore } from '@/stores'
-import { AxiosError, isAxiosError } from 'axios'
 
 interface IFormAddMenuMultipleItemsProps {
   products: IAddMenuItemRequest[]
@@ -63,13 +62,6 @@ export const AddMenuMultipleItemsForm: React.FC<
         clearMenuItems()
         onSubmit(false)
         showToast(t('toast.addMenuItemSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

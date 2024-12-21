@@ -17,14 +17,12 @@ import {
 import { createProductSchema, TCreateProductSchema } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, ICreateProductRequest } from '@/types'
+import { ICreateProductRequest } from '@/types'
 import { useCreateProduct } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { IsLimitSwitch } from '@/components/app/switch'
 import { CatalogSelect } from '@/components/app/select'
-import { isAxiosError } from 'axios'
-import { AxiosError } from 'axios'
 
 interface IFormCreateProductProps {
   onSubmit: (isOpen: boolean) => void
@@ -55,13 +53,6 @@ export const CreateProductForm: React.FC<IFormCreateProductProps> = ({
         onSubmit(false)
         form.reset()
         showToast(t('toast.createProductSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

@@ -16,7 +16,7 @@ export const usePendingOrdersColumns = (): ColumnDef<IOrder>[] => {
       cell: () => {
         return (
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary p-2.5">
-            <BikeIcon className="icon text-white" />
+            <BikeIcon className="text-white icon" />
           </div>
         )
       },
@@ -89,7 +89,7 @@ export const usePendingOrdersColumns = (): ColumnDef<IOrder>[] => {
       ),
       cell: ({ row }) => {
         const order = row.original
-        return <OrderStatusBadge status={order?.status} />
+        return <OrderStatusBadge order={order} />
       },
     },
     {

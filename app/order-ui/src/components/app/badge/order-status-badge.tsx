@@ -1,13 +1,15 @@
 import { useTranslation } from 'react-i18next'
 
-import { OrderStatus } from '@/types'
+import { IOrder, OrderStatus } from '@/types'
+import { paymentStatus } from '@/constants'
 
 interface IOrderStatusBadgeProps {
-  status: OrderStatus
+  order: IOrder | undefined
 }
 
-export default function OrderStatusBadge({ status }: IOrderStatusBadgeProps) {
+export default function OrderStatusBadge({ order }: IOrderStatusBadgeProps) {
   const { t } = useTranslation(['menu'])
+  console.log(order)
 
   const getBadgeColor = (status: OrderStatus) => {
     switch (status) {
@@ -24,28 +26,35 @@ export default function OrderStatusBadge({ status }: IOrderStatusBadgeProps) {
     }
   }
 
-  const getBadgeText = (status: OrderStatus) => {
-    switch (status) {
-      case OrderStatus.PENDING:
-        return t('order.pending')
-      case OrderStatus.SHIPPING:
-        return t('order.shipping')
-      case OrderStatus.COMPLETED:
-        return t('order.completed')
-      case OrderStatus.PAID:
-        return t('order.paid')
-      case OrderStatus.FAILED:
-        return t('order.failed')
+  const getBadgeText = (order: IOrder) => {
+    console.log(order?.status, order?.payment?.statusCode)
+    if (order?.status === OrderStatus.PENDING && order?.payment?.statusCode === paymentStatus.PENDING) {
+      return t('order.pending');
+    } else if (order?.status === OrderStatus.PENDING && order?.payment?.statusCode === paymentStatus.COMPLETED) {
+      return t('order.pending');
+    } else if (order?.status === OrderStatus.PAID && order?.payment?.statusCode === paymentStatus.COMPLETED) {
+      return t('order.paid');
+    } else if (order?.status === OrderStatus.SHIPPING && order?.payment?.statusCode === paymentStatus.COMPLETED) {
+      return t('order.shipping');
+    } else if (order?.status === OrderStatus.SHIPPING && order?.payment?.statusCode === paymentStatus.PENDING) {
+      return t('order.shipping');
+    } else if (order?.status === OrderStatus.COMPLETED && order?.payment?.statusCode === paymentStatus.PENDING) {
+      return t('order.completed');
+    } else if (order?.status === OrderStatus.COMPLETED && order?.payment?.statusCode === paymentStatus.COMPLETED) {
+      return t('order.completed');
+    } else {
+      return t('order.unknown');
     }
-  }
+  };
+
   // Ensure the component returns valid JSX
   return (
     <span
       className={`inline-block min-w-[4.5rem] px-2 py-0.5 text-center font-beVietNam text-[0.7rem] ${getBadgeColor(
-        status,
+        order?.status || OrderStatus.FAILED,
       )} rounded-full`}
     >
-      {getBadgeText(status)}
+      {getBadgeText(order as IOrder)}
     </span>
   )
 }

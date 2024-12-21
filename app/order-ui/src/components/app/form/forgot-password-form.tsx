@@ -1,7 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { AxiosError, isAxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -21,8 +20,7 @@ import { ButtonLoading } from '@/components/app/loading'
 import { ROUTE } from '@/constants'
 import { useForgotPassword } from '@/hooks'
 
-import { showErrorToast, showToast } from '@/utils'
-import { IApiResponse } from '@/types'
+import { showToast } from '@/utils'
 
 export const ForgotPasswordForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
     const { t } = useTranslation(['auth'])
@@ -39,13 +37,6 @@ export const ForgotPasswordForm: React.FC<{ onSuccess: () => void }> = ({ onSucc
             onSuccess: () => {
                 onSuccess()
                 showToast(t('toast.forgotPasswordSuccess'))
-            },
-            onError: (error) => {
-                if (isAxiosError(error)) {
-                    const axiosError = error as AxiosError<IApiResponse<void>>
-                    if (axiosError.response?.data.code)
-                        showErrorToast(axiosError.response.data.code)
-                }
             },
         })
     }

@@ -17,15 +17,13 @@ import {
 import { createTableSchema, TCreateTableSchema } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, ICreateTableRequest } from '@/types'
+import { ICreateTableRequest } from '@/types'
 import { useCreateTable } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { BranchSelect } from '@/components/app/select'
 import { TableStatus } from '@/constants'
 import TableLocationSelect from '../select/table-location-select'
 import { useUserStore } from '@/stores'
-import { AxiosError, isAxiosError } from 'axios'
-// import { IsEmptySwitch } from '../switch'
 
 interface IFormCreateTableProps {
   onSubmit: (isOpen: boolean) => void
@@ -60,13 +58,6 @@ export const CreateTableForm: React.FC<IFormCreateTableProps> = ({
         onSubmit(false)
         form.reset()
         showToast(t('toast.createTableSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

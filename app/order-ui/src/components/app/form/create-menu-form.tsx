@@ -22,13 +22,12 @@ import { useAllMenus, usePagination, useCreateMenu } from '@/hooks'
 import { createMenuSchema, TCreateMenuSchema } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, ICreateMenuRequest } from '@/types'
-import { showErrorToast, showToast } from '@/utils'
+import { ICreateMenuRequest } from '@/types'
+import { showToast } from '@/utils'
 import { BranchSelect } from '@/components/app/select'
 import { cn } from '@/lib'
 import { IsTemplateSwitch } from '@/components/app/switch'
 import { useUserStore } from '@/stores'
-import { AxiosError, isAxiosError } from 'axios'
 
 interface IFormCreateMenuProps {
   onSubmit: (isOpen: boolean) => void
@@ -83,13 +82,6 @@ export const CreateMenuForm: React.FC<IFormCreateMenuProps> = ({
         onSubmit(false)
         form.reset()
         showToast(t('toast.createMenuSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

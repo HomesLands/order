@@ -20,11 +20,10 @@ import {
 } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, ICreateProductVariantRequest } from '@/types'
+import { ICreateProductVariantRequest } from '@/types'
 import { useCreateProductVariant } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { SizeSelect } from '@/components/app/select'
-import { AxiosError, isAxiosError } from 'axios'
 
 interface IFormCreateProductVariantProps {
   onSubmit: (isOpen: boolean) => void
@@ -55,13 +54,6 @@ export const CreateProductVariantForm: React.FC<
         onSubmit(false)
         form.reset()
         showToast(t('toast.createProductVariantSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

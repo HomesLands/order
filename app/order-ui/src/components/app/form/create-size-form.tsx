@@ -15,11 +15,10 @@ import {
 import { createSizeSchema, TCreateSizeSchema } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, ICreateSizeRequest } from '@/types'
+import { ICreateSizeRequest } from '@/types'
 import { useCreateSize } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
-import { AxiosError, isAxiosError } from 'axios'
 
 interface IFormCreateSizeProps {
   onSubmit: (isOpen: boolean) => void
@@ -46,13 +45,6 @@ export const CreateSizeForm: React.FC<IFormCreateSizeProps> = ({ onSubmit }) => 
         onSubmit(false)
         form.reset()
         showToast(t('toast.createSizeSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

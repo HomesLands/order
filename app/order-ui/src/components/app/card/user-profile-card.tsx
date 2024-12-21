@@ -5,10 +5,8 @@ import { ProfilePicture } from '@/components/app/avatar'
 import { useProfile, useUploadProfilePicture } from '@/hooks'
 import { publicFileURL } from '@/constants'
 import { UpdatePasswordDialog, UpdateProfileDialog } from '@/components/app/dialog'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { useUserStore } from '@/stores'
-import { AxiosError, isAxiosError } from 'axios'
-import { IApiResponse } from '@/types'
 
 export default function UserProfileCard() {
   const { t } = useTranslation(['profile', 'toast'])
@@ -22,13 +20,13 @@ export default function UserProfileCard() {
         showToast(t('toast.uploadProfilePictureSuccess'))
         setUserInfo(data.result)
       },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
-      },
+      // onError: (error) => {
+      //   if (isAxiosError(error)) {
+      //     const axiosError = error as AxiosError<IApiResponse<void>>
+      //     if (axiosError.response?.data.code)
+      //       showErrorToast(axiosError.response.data.code)
+      //   }
+      // },
     })
   }
 

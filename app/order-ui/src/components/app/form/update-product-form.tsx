@@ -17,13 +17,12 @@ import {
 import { updateProductSchema, TUpdateProductSchema } from '@/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IApiResponse, IProduct, IUpdateProductRequest } from '@/types'
+import { IProduct, IUpdateProductRequest } from '@/types'
 import { useUpdateProduct } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { IsLimitSwitch } from '@/components/app/switch'
 import { CatalogSelect } from '@/components/app/select'
-import { AxiosError, isAxiosError } from 'axios'
 
 interface IFormUpdateProductProps {
   product: IProduct
@@ -58,13 +57,6 @@ export const UpdateProductForm: React.FC<IFormUpdateProductProps> = ({
         onSubmit(false)
         form.reset()
         showToast(t('toast.updateProductSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

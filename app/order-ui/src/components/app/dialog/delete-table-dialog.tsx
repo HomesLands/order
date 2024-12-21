@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { AxiosError, isAxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { Trash2, TriangleAlert } from 'lucide-react'
 
@@ -14,10 +13,10 @@ import {
   DialogTrigger,
 } from '@/components/ui'
 
-import { IApiResponse, ITable } from '@/types'
+import { ITable } from '@/types'
 
 import { useDeleteTable } from '@/hooks'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 
 interface DeleteTableDialogProps {
@@ -41,13 +40,6 @@ export default function DeleteTableDialog({ table, onContextOpen }: DeleteTableD
         })
         setIsOpen(false)
         showToast(tToast('toast.deleteTableSuccess'))
-      },
-      onError: (error) => {
-        if (isAxiosError(error)) {
-          const axiosError = error as AxiosError<IApiResponse<void>>
-          if (axiosError.response?.data.code)
-            showErrorToast(axiosError.response.data.code)
-        }
       },
     })
   }

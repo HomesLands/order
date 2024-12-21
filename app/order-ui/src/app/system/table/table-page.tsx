@@ -16,11 +16,8 @@ import { TableItem } from './table-item'
 import { useUserStore } from '@/stores'
 import TableContextMenu from './table-context-menu'
 import { useQueryClient } from '@tanstack/react-query'
-import { showErrorToast, showToast } from '@/utils'
+import { showToast } from '@/utils'
 import { TableStatus } from '@/constants'
-import { isAxiosError } from 'axios'
-import { AxiosError } from 'axios'
-import { IApiResponse } from '@/types'
 
 export default function TablePage() {
   const queryClient = useQueryClient()
@@ -98,13 +95,13 @@ export default function TablePage() {
           })
           showToast(tToast('toast.updateTableStatusSuccess'))
         },
-        onError: (error) => {
-          if (isAxiosError(error)) {
-            const axiosError = error as AxiosError<IApiResponse<void>>
-            if (axiosError.response?.data.code)
-              showErrorToast(axiosError.response.data.code)
-          }
-        },
+        // onError: (error) => {
+        //   if (isAxiosError(error)) {
+        //     const axiosError = error as AxiosError<IApiResponse<void>>
+        //     if (axiosError.response?.data.code)
+        //       showErrorToast(axiosError.response.data.code)
+        //   }
+        // },
       },
     )
     setContextMenu({ show: false, x: 0, y: 0, tableId: '' })
