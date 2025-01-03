@@ -127,6 +127,13 @@ export const UserListPage = React.lazy(() =>
   })),
 )
 
+//Branch page
+export const BranchPage = React.lazy(() =>
+  import('@/app/system/branch').then((module) => ({
+    default: module.BranchManagementPage,
+  })),
+)
+
 //Log page
 export const LoggerPage = React.lazy(() =>
   import('@/app/system/logger').then((module) => ({
@@ -159,6 +166,13 @@ export const RevenuePage = React.lazy(() =>
 export const BankConfigPage = React.lazy(() =>
   import('@/app/system/payment').then((module) => ({
     default: module.BankConfigPage,
+  })),
+)
+
+//Static page
+export const StaticPageManagementPage = React.lazy(() =>
+  import('@/app/system/static-page').then((module) => ({
+    default: module.StaticPageManagementPage,
   })),
 )
 

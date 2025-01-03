@@ -1,0 +1,1 @@
+export { default as StaticPageManagementPage } from './static-page'

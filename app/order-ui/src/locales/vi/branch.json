@@ -1,0 +1,18 @@
+{
+  "branch": {
+    "title": "Chi nhánh",
+    "slug": "Mã chi nhánh",
+    "branchName": "Tên chi nhánh",
+    "branchAddress": "Địa chỉ chi nhánh",
+    "branchPhone": "Số điện thoại",
+    "branchEmail": "Email",
+    "branchDescription": "Mô tả",
+
+    "update": "Cập nhật chi nhánh",
+    "updateBranchDescription": "Thay đổi thông tin để cập nhật chi nhánh",
+    "create": "Tạo chi nhánh",
+    "createBranchDescription": "Điền đầy đủ thông tin để tạo chi nhánh mới",
+    "enterBranchName": "Nhập tên chi nhánh",
+    "enterBranchAddress": "Nhập địa chỉ chi nhánh"
+  }
+}

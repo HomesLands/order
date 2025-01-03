@@ -1,0 +1,1 @@
+export { default as BranchManagementPage } from './branch-page'

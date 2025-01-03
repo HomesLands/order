@@ -10,6 +10,7 @@ import {
   LayoutGrid,
   Phone,
   ShoppingBag,
+  Store,
   Users,
 } from 'lucide-react'
 
@@ -71,10 +72,22 @@ export const sidebarRoutes: ISidebarRoute[] = [
     icon: Users,
   },
   {
+    title: 'sidebar.branchManagement',
+    path: ROUTE.STAFF_BRANCH,
+    roles: [Role.ADMIN, Role.SUPER_ADMIN],
+    icon: Store,
+  },
+  {
     title: 'sidebar.revenueManagement',
     path: ROUTE.STAFF_REVENUE,
     roles: [Role.ADMIN, Role.SUPER_ADMIN, Role.MANAGER],
     icon: ChartColumn,
+  },
+  {
+    title: 'sidebar.staticPageManagement',
+    path: ROUTE.STAFF_STATIC_PAGE,
+    roles: [Role.ADMIN, Role.SUPER_ADMIN],
+    icon: FileChartColumnIncreasing,
   },
   {
     title: 'sidebar.logManagement',

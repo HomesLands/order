@@ -1,0 +1,34 @@
+.editor-container {
+  padding: 20px;
+  min-height: 500px;
+}
+
+/* Đảm bảo editor có chiều cao tối thiểu */
+.ck-editor__editable {
+  min-height: 400px;
+}
+
+.error-message {
+  color: #dc3545;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+  background-color: #f8d7da;
+}
+
+.ck-editor__editable img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ck-editor__editable .image {
+  margin: 1em 0;
+}
+
+.ck-editor__editable .image img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  min-width: 50px;
+}

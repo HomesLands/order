@@ -36,9 +36,11 @@ import {
   ClientProfilePage,
   ClientPaymentPage,
   RevenuePage,
+  StaticPageManagementPage,
 } from './loadable'
 import ProtectedElement from '@/components/app/elements/protected-element'
 import { ClientLayout } from '@/app/layouts/client'
+import { BranchManagementPage } from '@/app/system/branch'
 
 export const router = createBrowserRouter([
   { path: ROUTE.LOGIN, element: <SuspenseElement component={LoginPage} /> },
@@ -302,6 +304,25 @@ export const router = createBrowserRouter([
     ],
   },
   {
+    path: ROUTE.STAFF_BRANCH,
+    element: (
+      <Suspense fallback={<SkeletonCart />}>
+        <SuspenseElement component={StaffLayout} />
+      </Suspense>
+    ),
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedElement
+            allowedRoles={[Role.ADMIN, Role.SUPER_ADMIN]}
+            element={<SuspenseElement component={BranchManagementPage} />}
+          />
+        ),
+      },
+    ],
+  },
+  {
     path: ROUTE.STAFF_REVENUE,
     element: (
       <Suspense fallback={<SkeletonCart />}>
@@ -315,6 +336,25 @@ export const router = createBrowserRouter([
           <ProtectedElement
             allowedRoles={[Role.ADMIN, Role.MANAGER, Role.SUPER_ADMIN]}
             element={<SuspenseElement component={RevenuePage} />}
+          />
+        ),
+      },
+    ],
+  },
+  {
+    path: ROUTE.STAFF_STATIC_PAGE,
+    element: (
+      <Suspense fallback={<SkeletonCart />}>
+        <SuspenseElement component={StaffLayout} />
+      </Suspense>
+    ),
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedElement
+            allowedRoles={[Role.ADMIN, Role.SUPER_ADMIN]}
+            element={<SuspenseElement component={StaticPageManagementPage} />}
           />
         ),
       },

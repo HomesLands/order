@@ -9,10 +9,24 @@ interface RevenueData {
 }
 
 export default function RevenueSummary({ startDate, endDate }: RevenueData) {
+    //Lấy startDate và endDate là ngày hiện tại
+    const today = '2024-12-27';
+
     const { data: revenueData } = useRevenue({
         startDate,
         endDate,
     })
+
+    const { data: CurrentRevenueData } = useRevenue({
+        startDate: today,
+        endDate: today,
+    })
+
+    //Tính tổng doanh thu ngày hiện tại
+    const totalRevenueToday = CurrentRevenueData?.result?.reduce((sum, item) => sum + (item.totalAmount || 0), 0) || 0;
+
+    //Định dạng revenue thành VND
+    const formattedRevenueToday = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalRevenueToday);
 
     // Tính tổng revenue
     const totalRevenue = revenueData?.result?.reduce((sum, item) => sum + (item.totalAmount || 0), 0) || 0;
@@ -41,7 +55,7 @@ export default function RevenueSummary({ startDate, endDate }: RevenueData) {
             </Card>
             <Card className="shadow-none">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-medium">Doanh số</CardTitle>
+                    <CardTitle className="text-sm font-medium">Tổng đơn hàng</CardTitle>
                     <CoffeeIcon className="w-4 h-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -61,11 +75,11 @@ export default function RevenueSummary({ startDate, endDate }: RevenueData) {
             </Card>
             <Card className="shadow-none">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-medium">Lượt khách</CardTitle>
+                    <CardTitle className="text-sm font-medium">Doanh thu hôm nay</CardTitle>
                     <Users className="w-4 h-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">3,120</div>
+                    <div className="text-2xl font-bold">{formattedRevenueToday}</div>
                     <p className="text-xs text-muted-foreground">+8% from last month</p>
                 </CardContent>
             </Card>

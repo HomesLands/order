@@ -18,6 +18,8 @@ import enProgress from '@/locales/en/progress.json'
 import enUser from '@/locales/en/user.json'
 import enConfig from '@/locales/en/config.json'
 import enRevenue from '@/locales/en/revenue.json'
+import enBranch from '@/locales/en/branch.json'
+import enStaticPage from '@/locales/en/static-page.json'
 
 import viToast from '@/locales/vi/toast.json'
 import viAuth from '@/locales/vi/auth.json'
@@ -35,6 +37,8 @@ import viProgress from '@/locales/vi/progress.json'
 import viUser from '@/locales/vi/user.json'
 import viConfig from '@/locales/vi/config.json'
 import viRevenue from '@/locales/vi/revenue.json'
+import viBranch from '@/locales/vi/branch.json'
+import viStaticPage from '@/locales/vi/static-page.json'
 
 i18n
   .use(LanguageDetector) // Tự động phát hiện ngôn ngữ
@@ -58,6 +62,8 @@ i18n
         user: enUser,
         config: enConfig,
         revenue: enRevenue,
+        branch: enBranch,
+        staticPage: enStaticPage,
       },
       vi: {
         toast: viToast,
@@ -76,6 +82,8 @@ i18n
         user: viUser,
         config: viConfig,
         revenue: viRevenue,
+        branch: viBranch,
+        staticPage: viStaticPage,
       },
     },
     lng: window.localStorage.getItem('i18nextLng') || 'vi',
@@ -101,6 +109,8 @@ i18n
       'user',
       'config',
       'revenue',
+      'branch',
+      'staticPage',
     ], //Dùng để phân biệt các phần khác nhau của app
     defaultNS: 'auth', //Ngôn ngữ mặc định
   })

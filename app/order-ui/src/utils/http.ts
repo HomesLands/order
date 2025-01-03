@@ -10,7 +10,6 @@ import moment from 'moment'
 import { useRequestStore } from '@/stores'
 import { useAuthStore } from '@/stores'
 import { IApiResponse, IRefreshTokenResponse } from '@/types'
-// import { showErrorToast } from './toast'
 import { baseURL, ROUTE } from '@/constants'
 import { useLoadingStore } from '@/stores'
 import { showErrorToast } from './toast'
@@ -46,8 +45,46 @@ const axiosInstance: AxiosInstance = axios.create({
   withCredentials: true,
 })
 
+// Public routes configuration
+const publicRoutes = [
+  { path: '/auth/login', methods: ['post'] },
+  { path: /^\/auth\/register$/, methods: ['post'] },
+  { path: /^\/auth\/refresh$/, methods: ['post'] },
+  { path: /^\/auth\/forgot-password$/, methods: ['post'] },
+  { path: /^\/auth\/forgot-password\/token$/, methods: ['post'] },
+  { path: /^\/menu\/specific$/, methods: ['get'] },
+  { path: /^\/products\/[^/]+$/, methods: ['get'] },
+  { path: /^\/branch$/, methods: ['get'] },
+  { path: /^\/menu-item\/[^/]+$/, methods: ['get'] },
+]
+
+// const publicRoutes = [
+//   /^\/auth\/login$/,
+//   /^\/auth\/register$/,
+//   /^\/auth\/refresh$/,
+//   /^\/auth\/forgot-password$/,
+//   /^\/auth\/forgot-password\/token$/,
+//   /^\/menu\/specific$/,
+//   /^\/products\/[^/]+$/, // Matches /product/:slug where :slug is any non-empty string
+//   /^\/branch$/, // Matches /branch
+//   /^\/menu-item\/[^/]+$/, // Matches /menu-item/:slug where :slug is any non-empty string
+// ]
+
+// const isPublicRoute = (url: string, method: string): boolean => {
+//   return publicRoutes.some((route) => route.test(url))
+// }
+
+const isPublicRoute = (url: string, method: string): boolean => {
+  const publicRoute = publicRoutes.find(
+    (route) => route.path === url && route.methods.includes(method),
+  )
+  if (publicRoute) return true
+  return false
+}
+
 axiosInstance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
+    const authStore = useAuthStore.getState()
     const {
       token,
       expireTime,
@@ -58,32 +95,16 @@ axiosInstance.interceptors.request.use(
       setRefreshToken,
       setExpireTimeRefreshToken,
       isAuthenticated,
-    } = useAuthStore.getState()
+    } = authStore
 
-    // Allow requests to public routes (login, register, etc.)
-    const publicRoutes = [
-      /^\/auth\/login$/,
-      /^\/auth\/register$/,
-      /^\/auth\/refresh$/,
-      /^\/auth\/forgot-password$/,
-      /^\/auth\/forgot-password\/token$/,
-      /^\/menu\/specific$/,
-      /^\/products\/[^/]+$/, // Matches /product/:slug where :slug is any non-empty string
-      /^\/branch$/, // Matches /branch
-      /^\/menu-item\/[^/]+$/, // Matches /menu-item/:slug where :slug is any non-empty string
-    ]
-
-    if (publicRoutes.some((route) => route.test(config.url || ''))) {
-      return config
+    const currentToken = authStore.token
+    if (config.url) {
+      if (isPublicRoute(config.url, config.method || '')) return config
     }
 
-    // Prevent requests if not authenticated
     if (!isAuthenticated()) {
       return Promise.reject(new Error('User is not authenticated'))
     }
-
-    // Get fresh token state
-    const currentToken = useAuthStore.getState().token
 
     if (expireTime && isTokenExpired(expireTime) && !isRefreshing) {
       isRefreshing = true
@@ -101,12 +122,9 @@ axiosInstance.interceptors.request.use(
         setExpireTimeRefreshToken(response.data.result.expireTimeRefreshToken)
         processQueue(null, newToken)
       } catch (error) {
-        console.log({ error })
         processQueue(error, null)
         setLogout()
-        // redirect('/auth/login')
         showErrorToast(1017)
-        // You can redirect to the login page
         window.location.href = ROUTE.LOGIN
       } finally {
         isRefreshing = false
@@ -127,7 +145,6 @@ axiosInstance.interceptors.request.use(
 
     if (currentToken) {
       config.headers['Authorization'] = `Bearer ${currentToken}`
-
       if (!config?.doNotShowLoading) {
         const requestStore = useRequestStore.getState()
         if (requestStore.requestQueueSize === 0) {
@@ -135,14 +152,11 @@ axiosInstance.interceptors.request.use(
         }
         requestStore.incrementRequestQueueSize()
       }
-    } else {
-      console.log('No token available when trying to set headers')
     }
+
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  },
+  (error) => Promise.reject(error),
 )
 
 axiosInstance.interceptors.response.use(
@@ -152,21 +166,6 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     if (!error.config?.doNotShowLoading) setProgressBarDone()
-    if (error.response) {
-      // if (status === 401) {
-      //   showErrorToast(code)
-      // }
-      // if (status === 403) {
-      //   showErrorToast(code)
-      //   window.location.href = '/auth/login'
-      // }
-      // if (status === 404) {
-      //   showErrorToast(code)
-      // }
-      // if (status === 500) {
-      //   showErrorToast(code)
-      // }
-    }
     return Promise.reject(error)
   },
 )
